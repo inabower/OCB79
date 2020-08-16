@@ -39,6 +39,7 @@
 /*********************************************
  * HEADERS
  *********************************************/
+ $slideSize:    100%;
 
 .reveal h1,
 .reveal h2,
@@ -61,9 +62,18 @@
 }
 
 .reveal h1 {font-size: $heading1Size; }
-.reveal h2 {font-size: $heading2Size; }
+.reveal h2 {
+	font-size: $heading2Size;
+}
 .reveal h3 {font-size: $heading3Size; }
 .reveal h4 {font-size: $heading4Size; }
+
+.reveal h6 {
+	position: absolute;
+	left: 0;
+	right: 0;
+	margin: auto;
+	top:-25px; }
 
 .reveal h1 {
 	text-shadow: $heading1TextShadow;
@@ -75,6 +85,7 @@
  *********************************************/
 
 .reveal p {
+	width:  $slideSize;
 	margin: $blockMargin 0;
 	line-height: 1.3;
 }

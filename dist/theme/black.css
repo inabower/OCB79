@@ -91,6 +91,13 @@ section.has-light-background, section.has-light-background h1, section.has-light
 .reveal h4 {
   font-size: 1em; }
 
+.reveal h6 {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  top: -25px; }
+
 .reveal h1 {
   text-shadow: none; }
 
@@ -98,6 +105,7 @@ section.has-light-background, section.has-light-background h1, section.has-light
  * OTHER
  *********************************************/
 .reveal p {
+  width: 100%;
   margin: 20px 0;
   line-height: 1.3; }
 
