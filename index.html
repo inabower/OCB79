@@ -330,62 +330,79 @@
 						<div class="leftbox" style="text-align: left">
 							<ul style="font-size: 20px">
 								<ul>
-									<li>スタンドアローン型HMD</li>
+									<li></li>
 								</ul>
 								<br>
 								<li>良かった点</li>
 								<ul>
 									<li></li>
 								</ul>
-								<br>
-								<li>気になる点</li>
-								<ul>
-									<li></li>
-								</ul>
 							</ul>
+							<pre><code class="hljs python" style="font-size: 15px; min-height: 40%;">import getfem as gf
+# メッシュの読み込み
+m = gf.Mesh('import', 'gmsh', 'tmp.msh') # Gmsh形式のメッシュを読込
+# 場の作成
+mfu=gf.MeshFem(m,3) # 3次元の変位
+# 有限要素法の作成
+mfu.set_fem(gf.Fem('FEM_PK(3,2)')) # 四面体上の2次のLagrange要素
+# 立体求積法の作成
+mim=gf.MeshIm(m, gf.Integ('IM_TETRAHEDRON(5)')) # 四面体要素の5次のGauss積分
+...</code></pre>
 						</div>
 						<div class="rightbox1">
 							<img src="fig/logogetfem.png">
 						</div>
 						<div class="rightbox2">
-							<p>HMD(ヘッドマウントディスプレイ)：VRゴーグルと呼ぶよりHMDと読んだ方が上級者感が出る</p>
-							<p>VR音ゲー：BeatSaberという飛んでくる箱を曲に合わせて斬るゲーム。最初はほぼこれだけのためにHMDを買った。</p>
+							<p>参考になるサイト</p>
+							<ul style="font-size: 20px;">
+							<li>公式サイト：<a href="http://getfem.org/">getfem.org</a></li>
+							<li>ドキュメント和訳：<a style="font-size: 10px;" href="https://getfem.readthedocs.io/ja/latest/contents.html">getfem.readthedocs.io/ja/latest</a></li>
+							<ul>
+								<li><a href="https://getfem.readthedocs.io/ja/latest/userdoc/appendixA.html">付録A.有限要素法リスト</a></li>
+								<li><a href="https://getfem.readthedocs.io/ja/latest/userdoc/appendixB.html">付録B.立体求積法のリスト</a></li>
+							</ul>
+							<li>yugen氏のTwitter：<a href="https://twitter.com/tkoyama010">@tkoyama010</a></li>
+							</ul>
+						</div>
+					</section>
+				</section>
+				<section data-transition="fade-up">
+					<section data-transition="fade-up">
+						<h2>STEP1：メッシュの変換</h2>
+						<div class="leftbox" style="text-align: left">
+							<img src="fig/flow_0_introduction_2.png">
+						</div>
+						<div class="rightbox1">
+						</div>
+						<div class="rightbox2">
 						</div>
 					</section>
 					<section data-transition="fade-up">
-						<h2>モデリングソフト</h2>
+						<h2></h2>
 						<div class="leftbox" style="text-align: left">
-							<ul style="font-size: 20px">
-								<li>Oculus Medium</li>
-								<ul>
-									<li>VR制作ツール</li>
-									<li>価格：2,990円（2020.8.12現在, Oculus Store）</li>
-									<li>開発元：Adobe社</li>
-									<li>スカルプトモデリングやペイントなどが可能</li>
-									<li>PC接続必須</li>
-									<li>fbx, ply形式で入出力可能</li>
-								</ul>
-								<br>
-								<li>良かった点</li>
-								<ul>
-									<li>かなり直感的に操作できる</li>
-									<li>入出力が可能なので今回の用途にぴったり</li>
-								</ul>
-								<br>
-								<li>気になる点</li>
-								<ul>
-									<li>メモリをかなり食う。現状スペックではカクつく。</li>
-									<li>操作によって3Dモデルの基準座標を変えてしまうので慣れが必要</li>
-									<li>まだ全然使いこなせていない</li>
-								</ul>
-							</ul>
 						</div>
 						<div class="rightbox1">
-							<video src="fig/oculusMedium.mp4" autoplay loop muted></video>
+							<img src="fig/flow_0_introduction_2.png">
 						</div>
 						<div class="rightbox2">
-							<p>.fbx：Autodesk社製の拡張子。面、テクスチャ、リグのデータを保有可能</p>
-							<p>.ply：Stanford大学製の拡張子。点、辺、面のデータを保有可能</p>
+							<p></p>
+							<ul style="font-size: 20px;">
+							<li></li>
+							</ul>
+						</div>
+					</section>
+					<section data-transition="fade-up">
+						<h2></h2>
+						<div class="leftbox" style="text-align: left">
+						</div>
+						<div class="rightbox1">
+							<img src="fig/logogetfem.png">
+						</div>
+						<div class="rightbox2">
+							<p></p>
+							<ul style="font-size: 20px;">
+							<li></li>
+							</ul>
 						</div>
 					</section>
 				</section>
