@@ -282,6 +282,7 @@ fbx形式で保存された
   - gid
   - cdb
   - am_fmt
+- 今回はテトラメッシュでOK
 
 ## 今回はgmsh形式を目指す
 
@@ -291,10 +292,246 @@ fbx形式で保存された
 
 >>>
 
-一般的にサーフェスメッシュ
+ボリュームメッシュがサーフェスメッシュの線に引っ張られてしまう問題
 
+>>>
 
+## 解決法（Gmshの場合）
 
+- Compound Surface機能
+  - サーフェスメッシュの線に依存しないメッシュを作成できる
+
+>>>
+
+## うまくいかない・・・
+
+>>>
+
+## 困った・・・
+
+>>>
+
+## ？？？「ふむ・・・ならばOpenFOAMを使ったらどうだろう」
+
+---
+
+## OpenFOAM
+
+- 世界一使用されているOSSの数値流体解析ツールボックス
+- 熱流体や圧縮性流体、混相流など幅広い対象を解析可能
+- メッシュの作成や変換などの機能も充実している
+- cfMeshの*"tetMesh"*でテトラメッシュを作成可能
+
+>>>
+
+## tetMesh（OpenFOAMのユーティリティ）
+
+- 表面メッシュからテトラメッシュを生成する
+- 境界層がない場合は以下のような単純な設定で生成可能
+- メッシュ品質としてはsnappyで生成されたポリヘドラメッシュをテトラに分解したもの
+
+>>>
+
+## foamToVTK（OpenFOAMのユーティリティ）
+
+- OpenFOAMのデータをVTK形式に変換する
+- セル情報のvtuと境界情報のvtpに分割されることになる
+- 今回はセル情報のvtuを使用する
+
+>>>
+
+###### OpenFOAMによりvtu形式のボリュームメッシュに変換できた
+
+<img src="fig/flow_2_OpenFOAM.png" height="580">
+
+---
+
+# ボリュームメッシュの変換
+
+>>>
+
+- GetFEMで使用するためにGmsh形式への変換が必要
+
+# ↓
+
+## meshioとGmshを使用する
+
+>>>
+
+## meshio
+
+- Pythonのライブラリの一つ
+- かなり多くのメッシュについてimport/exportができる
+
+<img src="fig/meshio.png" width="400">
+
+>>>
+
+## meshioとGmshのインストールと実行例
+
+```bash
+# meshioをインストール
+$ pip install meshio
+# Gmshをインストール
+$ sudo apt-get install gmsh
+$
+# gmsh22形式に変換
+$ meshio-convert VTK/case_0/internaal.vtu --output-format gmsh22 tmp22.msh
+# gmsh1形式に変換
+$ gmsh -3 tmp22.msh -format msh1 tmp1.msh
+```
+
+>>>
+
+###### meshioとGmshによりgmsh1形式に変換できた
+
+<img src="fig/flow_3_GetFEM.png" height="580">
+
+>>>
+
+いよいよGetFEMへ
+
+---
+
+## GetFEMによる解析
+
+>>>
+
+<section data-background-iframe="md/faomToGmsh.html" data-background-interactive>
+</section>
+
+>>>
+
+>>>
+
+計算できそうなら.py形式にして実行できるようにする。
+
+```Python
+import sys
+import getfem as gf
+import numpy as np
+
+def main(mesh_file, output_name):
+    degree = 2
+    E = 1e3
+    Nu = 0.3
+    Lambda = E*Nu / ((1+Nu)*(1-2*Nu))
+    Mu = E/(2*(1+Nu))
+
+    m = gf.Mesh('import', 'gmsh', mesh_file)
+    
+    mfu = gf.MeshFem(m,3)
+    mfp = gf.MeshFem(m,1)
+
+    mfu.set_fem(gf.Fem('FEM_PK(3,2)'))
+    mfp.set_fem(gf.Fem('FEM_PK(3,0)'))
+
+    mim = gf.MeshIm(m, gf.Integ('IM_TETRAHEDRON(5)'))
+
+    topfaces = m.outer_faces_in_box([0.0,-0.01,0.011], [0.025, 0.08, 0.019])
+    btmfaces = m.outer_faces_in_box([0.0,-0.01,-0.0061], [0.025, 0.08, -0.0059])
+    NEUMANN_BOUNDARY = 1
+    DIRICHLET_BOUNDARY = 2
+
+    m.set_region(NEUMANN_BOUNDARY,   topfaces)
+    m.set_region(DIRICHLET_BOUNDARY, btmfaces)
+
+    md = gf.Model('real')
+    md.add_fem_variable('u', mfu)
+    md.add_initialized_data('cmu', Mu)
+    md.add_initialized_data('clambda', Lambda)
+    md.add_isotropic_linearized_elasticity_brick(mim, 'u', 'clambda', 'cmu')
+    md.add_fem_variable('p', mfp)
+    md.add_linear_incompressibility_brick(mim, 'u', 'p')
+    md.add_initialized_data('VolumicData', [0,-1,0])
+    md.add_source_term_brick(mim, 'u', 'VolumicData')
+
+    # Attach the tripod to the ground
+    md.add_Dirichlet_condition_with_multipliers(mim, 'u', mfu, 2)
+
+    print('running solve...')
+    md.solve('noisy', 'max iter', 1);
+    U = md.variable('u');
+    print('solve done!')
+    
+    sl.export_to_vtk(output_name, 'ascii', mfdu,  VM, 'Von Mises Stress', mfu, U, 'Displacement')
+    
+    print(f'Result is exported to {output_name}')
+    
+if __name__ == "__main__":
+    mesh_name = sys.argv[1]
+    output_name = sys.argv[2]
+    
+    main(mesh_name, output_name)
+
+```
+
+---
+
+# 自動化スクリプト
+
+>>>
+
+## 待受ディレクトリ構造
+
+>>>
+
+## スクリプトの中身
+
+```bash
+#!/bin/bash
+
+FBX_FILE_PATTERN='.*\.fbx$'
+inotifywait -m -q -e CLOSE_WRITE -r . --format "%w%f" | while read newFile
+    echo "${newFile} detected"
+    [[ $newFile =~ ${FBX_FILE_PATTERN} ]] || continue
+    fileName=`basename ${newFile}`
+    name=`${fileName%.*}`
+    newDir=${name}_tmp
+    mkdir -p ${newDir}
+    caseDir=$newDir/case
+    logFile=$newDir/log
+    cp -r foamCase $caseDir
+
+    echo "Blender process fbx -> stl"
+    echo "Blender process fbx -> stl" >> $logFile 2>&1
+    blender -b makeStl.py ${newFile} $caseDir/tmp.stl >> $logFile 2>&1
+
+    echo "OpenFOAM process stl -> vtu"
+    echo "OpenFOAM process stl -> vtu" >> $logFile 2>&1
+    tetMesh -case $caseDir >> $logFile 2>&1
+    renumberMesh -overwrite -case $caseDir >> $logFile 2>&1
+    foamToVTK -case $caseDir >> $logFile 2>&1
+
+    echo "meshio process vtu -> msh22"
+    echo "meshio process vtu -> msh22" >> $logFile 2>&1
+    meshio-convert ${caseDir}/VTK/case_0/internal.vtu --output-format gmsh22 ${newDir}/tmp22.msh >> $logFile 2>&1
+
+    echo "Gmsh process msh22 -> msh1"
+    echo "Gmsh process msh22 -> msh1" >> $logFile 2>&1
+    gmsh -3 ${newDir}/tmp22.msh -format msh1 ${newDir}/tmp1.msh >> $logFile 2>&1
+
+    echo "GetFEM calculating"
+    echo "GetFEM calculating" >> $logFile 2>&1
+    python calcLinear ${newDir}/tmp1.msh ${newDir}/mises.vtk >> $logFile 2>&1
+
+    paraview --data=${newDir}/mises.vtk
+done
+```
+
+>>>
+
+## 実行例
+
+---
+
+## まとめ
+
+>>>
+
+- fbxを保存すると応力の解析結果が出力された
+- 時間がかかってしまうのはメモリの不足が原因か
+- メッシュ周りに苦労しすぎて全然有限要素法の勉強ができていない
 
 
 
