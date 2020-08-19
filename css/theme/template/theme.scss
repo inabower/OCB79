@@ -4,7 +4,10 @@
  * GLOBAL STYLES
  *********************************************/
 
+$mainFontSize: 8px;
+
 @import "./exposer";
+
 
 .reveal-viewport {
 	@include bodyBackground();
@@ -318,4 +321,11 @@
     .backgrounds {
         background-color: $backgroundColor;
     }
+}
+
+.container{
+    display: flex;
+}
+.col{
+    flex: 1;
 }
