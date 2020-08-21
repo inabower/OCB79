@@ -103,7 +103,7 @@ SLA型 3Dプリンタ
 </div>
 
 <div class="col" style="width: 50%; float: right;">
-<video src="fig/LDA.mp4" autoplay loop width="100%"></video>
+<video src="fig/LDA.mp4" autoplay loop control width="100%"></video>
 </div>
 <div class="col" style="width: 40%; float: right;">
 <font size=3em>
@@ -278,7 +278,7 @@ SLA型 3Dプリンタ
 - <font color="blue" size="8em">GetFEM</font>
     - Pythonで呼び出して使用することが可能。
     - 積分法や有限要素法を自分で指定して組み立てていく
-    - 有限要素法の理解のために良さそうと思い使用
+    - 有限要素法の勉強になりそう
 
 - 良かった点
     - 頑張ればPython内でプリからポストまで完結できる
@@ -407,7 +407,7 @@ mim=gf.MeshIm(m, gf.Integ('IM_TETRAHEDRON(5)')) # 四面体要素の5次のGauss
 
 >>>
 
-## やっとVRでモデリング
+## これを元にVRでモデリングしてみよう
 
 ---
 
@@ -686,6 +686,8 @@ stl形式のサーフェスメッシュ（左）からtetMeshで生成したボ�
 
 vtu形式のボリュームメッシュができたのでgmsh形式に変換する
 
+<img src="fig/mesh_openfoam.png" height="500">
+
 
 >>>
 
@@ -711,7 +713,7 @@ $ gmsh -3 tmp22.msh -format msh1 tmp1.msh
 
 >>>
 
-構造解析
+いよいよ構造解析へ→
 
 ---
 
@@ -720,6 +722,10 @@ $ gmsh -3 tmp22.msh -format msh1 tmp1.msh
 >>>
 
 <!-- .element: data-background-iframe="md/faomToGmsh.html" -->
+
+>>>
+
+<!-- .element: data-background-iframe="md/mises.html" -->
 
 >>>
 
@@ -911,7 +917,7 @@ done
 
 >>>
 
-実行例
+# 完成！
 
 ---
 
