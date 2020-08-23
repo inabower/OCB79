@@ -1,4 +1,8 @@
-## VRモデリング→構造解析→3Dプリンタ
+## VRモデリング
+
+## → 構造解析
+
+## → 3Dプリンタ
 
 ---
 
@@ -103,7 +107,7 @@ SLA型 3Dプリンタ
 </div>
 
 <div class="col" style="width: 50%; float: right;">
-<video src="fig/LDA.mp4" autoplay loop control width="100%"></video>
+<video src="fig/LDA.mp4" autoplay loop></video>
 </div>
 <div class="col" style="width: 40%; float: right;">
 <font size=3em>
@@ -167,8 +171,7 @@ SLA型 3Dプリンタ
 - 補足
   - HMD(ヘッドマウントディスプレイ)：VRゴーグルと呼ぶよりHMDと読んだ方がわかってる感が出る
   - VR音ゲー：BeatSaberという飛んでくる箱を曲に合わせて斬るゲーム。最初はほぼこれだけのためにHMDを買った。
-  - Valve Index：現在ハイエンドのHMD。13万円程度。解像度やフレームレートが段違いらしい。欲しい。
-  - VRに必要なＰＣスペック：GPUはNVIDIAのものだと2000番台以降でできる機能が増える。（リアルタイムレイトレーシング）CPUはクロック数優先。メモリは多い方がいい（それはそう）
+  - Valve Index：現在ハイエンドのHMD。13万円程度。解像度やフレームレートが段違いらしい。欲しい。　
 
 </font>
 </div>
@@ -273,7 +276,7 @@ SLA型 3Dプリンタ
 
 <div class="col" style="width: 50%; float: left;">
 
-<font size=4.5em>
+<font size=5.5em>
 
 - <font color="blue" size="8em">GetFEM</font>
     - Pythonで呼び出して使用することが可能。
@@ -284,23 +287,26 @@ SLA型 3Dプリンタ
     - 頑張ればPython内でプリからポストまで完結できる
     - Jupyter内で動かせばデバッグもやりやすい
     - 式を作るところから行うので勉強になる
-    - Twitterに強い人（日本人コミッター）がいる
 
 </font>
 </div>
 
 <div class="col" style="width: 50%; float: right;">
 
+<font size=5em>
+
 ```python
 # メッシュの読み込み
 m = gf.Mesh('import', 'gmsh', 'tmp.msh') # Gmsh形式のメッシュを読込
 # 場の作成
 mfu=gf.MeshFem(m,3) # 3次元の変位
-# 有限要素法の作成
+# 要素の作成
 mfu.set_fem(gf.Fem('FEM_PK(3,2)')) # 四面体上の2次のLagrange要素
 # 立体求積法の作成
 mim=gf.MeshIm(m, gf.Integ('IM_TETRAHEDRON(5)')) # 四面体要素の5次のGauss積分
 ```
+
+</font>
 
 </div>
 
@@ -310,10 +316,9 @@ mim=gf.MeshIm(m, gf.Integ('IM_TETRAHEDRON(5)')) # 四面体要素の5次のGauss
 <br><br>
 - 参考になるサイト
   - 公式サイト：<a href="http://getfem.org/">getfem.org</a>
-  - ドキュメント和訳：<a style="font-size: 10px;" href="https://getfem.readthedocs.io/ja/latest/contents.html">getfem.readthedocs.io/ja/latest</a>
+  - ドキュメント和訳：<a style="" href="https://getfem.readthedocs.io/ja/latest/contents.html">getfem.readthedocs.io/ja/latest</a>
     - <a href="https://getfem.readthedocs.io/ja/latest/userdoc/appendixA.html">付録A.有限要素法リスト</a></li>
     - <a href="https://getfem.readthedocs.io/ja/latest/userdoc/appendixB.html">付録B.立体求積法のリスト</a>
-  - yugen氏のTwitter：<a href="https://twitter.com/tkoyama010">@tkoyama010</a>
 
 </font>
 </div>
@@ -407,7 +412,7 @@ mim=gf.MeshIm(m, gf.Integ('IM_TETRAHEDRON(5)')) # 四面体要素の5次のGauss
 
 >>>
 
-## これを元にVRでモデリングしてみよう
+### これを元にVRでモデリング→
 
 ---
 
@@ -441,7 +446,7 @@ mim=gf.MeshIm(m, gf.Integ('IM_TETRAHEDRON(5)')) # 四面体要素の5次のGauss
 
 >>>
 
-fbx形式で保存された
+### fbx形式で保存されたので整形していく→
 
 ---
 
@@ -570,7 +575,7 @@ bpy.ops.export_mesh.stl(filepath=newStlFileName, use_selection=True)
 
 >>>
 
-目的のSTLができた
+### これを元にボリュームメッシュを作っていく→
 
 ---
 
@@ -580,25 +585,40 @@ bpy.ops.export_mesh.stl(filepath=newStlFileName, use_selection=True)
 
 >>>
 
-### どんな形式が必要か
-
-- GetFEMが読み込み可能なのは以下のメッシュ
+- GetFEMが読み込み可能なのは
   - Gmsh (format1.0)
   - gid
   - cdb
   - am_fmt
 - 今回はテトラメッシュでOK？
 
-## ↓
+# 
 
-## Gmsh形式がよさそう
+### → Gmsh形式がよさそう
 
 >>>
 
-## GmshでSTLからボリュームメッシュを作成する
+<div class="container">
 
-- Compound Surface機能
-  - サーフェスメッシュの線に依存しないメッシュを作成できる
+<div class="col" style="width: 55%; float: left;">
+
+<font size=5.5em>
+
+<font color="blue" size="6em">GmshによるSTLからボリュームメッシュの作成</font>
+
+- Compound Surface
+  - サーフェスメッシュの線に依存しないメッシュを作成することができる
+
+</div>
+
+<div class="col" style="width: 45%; float: right;">
+
+<img src="fig/bunny.png" height="500">
+
+</div>
+
+</div>
+
 
 >>>
 
@@ -610,7 +630,7 @@ bpy.ops.export_mesh.stl(filepath=newStlFileName, use_selection=True)
 
 >>>
 
-## ふむ、ならばOpenFOAMでやってみてはどうだろう
+## そうだ！OpenFOAMを使おう！
 
 >>>
 
@@ -672,18 +692,6 @@ stl形式のサーフェスメッシュ（左）からtetMeshで生成したボ�
 
 >>>
 
-「OpenFOAMでメッシング」？
-
->>>
-
-<!-- .element: data-background-iframe="http://www.opencae.or.jp/activity/summerschool/opencae_summerschool2020/" -->
-
->>>
-
-話を戻します
-
->>>
-
 vtu形式のボリュームメッシュができたのでgmsh形式に変換する
 
 <img src="fig/mesh_openfoam.png" height="500">
@@ -741,10 +749,10 @@ import numpy as np
 def main(mesh_file, output_name):
     # 物性値
     degree = 2
-    E = 1e3
-    Nu = 0.3
-    Lambda = E*Nu / ((1+Nu)*(1-2*Nu))
-    Mu = E/(2*(1+Nu))
+    E = 1e3   # Young率
+    Nu = 0.3  # Poisson比
+    Lambda = E*Nu / ((1+Nu)*(1-2*Nu)) # Lame 定数 
+    Mu = E/(2*(1+Nu))                 # Lame 定数 
 
     # メッシュの読み込み
     m = gf.Mesh('import', 'gmsh', mesh_file)
@@ -753,6 +761,7 @@ def main(mesh_file, output_name):
     mfu = gf.MeshFem(m,3)
     mfp = gf.MeshFem(m,1)
 
+    # 要素
     mfu.set_fem(gf.Fem('FEM_PK(3,2)'))
     mfp.set_fem(gf.Fem('FEM_PK(3,0)'))
 
@@ -779,7 +788,6 @@ def main(mesh_file, output_name):
     md.add_initialized_data('VolumicData', [0,-1,0])
     md.add_source_term_brick(mim, 'u', 'VolumicData')
 
-    # Attach the tripod to the ground
     md.add_Dirichlet_condition_with_multipliers(mim, 'u', mfu, 2)
 
     # 計算実行
@@ -811,6 +819,16 @@ if __name__ == "__main__":
 
 </font>
 
+>>>
+
+###### メッシングから構造解析までができた
+
+<img src="fig/flow2_openfoam.png" height="580">
+
+>>>
+
+### 自動化してみよう→
+
 ---
 
 # STEP⑥
@@ -819,53 +837,20 @@ if __name__ == "__main__":
 
 >>>
 
-VRで保存したら勝手に解析してほしい
+<div class="container">
 
->>>
+<div class="col" style="width: 60%; float: left;">
 
-待受ディレクトリ構造
-
-```bash
-.
-├── user_yy-mm_dd-hh-mm-ss.fbx
-├── user_yy-mm_dd-hh-mm-ss.fbx # VRで保存したデータ
-└── work # この中身は固定
-    ├── autoDetection.sh # 自動探知スクリプト
-    ├── makeStl.py       # Blenderスクリプト
-    ├── addStl.stl         # 差分用
-    ├── diffStl.stl        # 差分用
-    ├── calcLinear.py    # GetFEMスクリプト
-    ├── foamCase         # OpenFOAM用空ケース
-    │   └── system
-    │       ├── controlDict
-    │       ├── fvSchemes
-    │       ├── fvSolution
-    │       └── meshDict  # メッシュ品質
-    ├── user_yy-mm_dd-hh-mm-ss  # 結果ごとに生成されるディレクトリ
-    │   ├── case
-    │   │   ├── tmp.stl  # Blenderで作成されたstl
-    │   │   ├── VTK
-    │   │   │   └── case_0
-    │   │   │       └── internal.vtu  # OpenFOAMで作成されたvtu
-    │   │   ├── constant
-    │   │   └── system
-    │   ├── tmp22.msh  # meshioで作成されたmsh(format22)
-    │   ├── tmp1.msh   # meshioで作成されたmsh(format1)
-    │   └── mises.vtk  # GetFEMで解析された結果
-    ...
-```
-
->>>
-
-## スクリプトの中身
+<font size=6em>
 
 ```bash
 #!/bin/bash
 
 FBX_FILE_PATTERN='.*\.fbx$'
+# 監視しているディレクトリにファイルが生成されたら発動
 inotifywait -m -q -e CLOSE_WRITE ../ --format "%w%f" | while read newFile
 do
-    #newFile=$PWD/../test2.fbx
+    # ファイル名から拡張子を抜いたり同名のディレクトリを作ったり
     [[ $newFile =~ ${FBX_FILE_PATTERN} ]] || continue
     echo "${newFile} detected"
     fileName=`basename ${newFile}`
@@ -876,15 +861,13 @@ do
     logFile=$newDir/log
     cp -r foamCase $caseDir
 
-    echo ""
+    # Blenderによりfbxと元形状からサーフェスメッシュを作成する
     echo "Blender process fbx -> stl"
-    echo "Blender process fbx -> stl" >> $logFile 2>&1
     blender -b -P makeStl.py -- $PWD/addStl.stl $PWD/diffStl.stl ${newFile} >> $logFile 2>&1
     cp ${newFile%.*}.stl $newDir/case/tmp.stl
 
-    echo ""
+    # OpenFOAMによりサーフェスメッシュからボリュームメッシュを作成する
     echo "OpenFOAM process stl -> vtu"
-    echo "OpenFOAM process stl -> vtu" >> $logFile 2>&1
     source ~/OpenFOAM/OpenFOAM-v2006/etc/bashrc
     tetMesh -case $caseDir >> $logFile 2>&1
     transformPoints -scale 0.001 -case $caseDir >> $logFile 2>&1
@@ -893,57 +876,89 @@ do
     checkMesh -case $caseDir >> $logFile.chechMesh 2>&1
     cat $logFile.chechMesh | grep -4 cells:
 
-    echo ""
+    # meshioで.msh(Gmsh2.2)に変換
     echo "meshio process vtu -> msh22"
-    echo "meshio process vtu -> msh22" >> $logFile 2>&1
     meshio-convert.exe ${caseDir}/VTK/case_0/internal.vtu --output-format gmsh22 ${newDir}/tmp22.msh >> $logFile 2>&1
 
-    echo ""
+    # Gmshで.msh(Gmsh1.0)に変換
     echo "Gmsh process msh22 -> msh1"
-    echo "Gmsh process msh22 -> msh1" >> $logFile 2>&1
     gmsh -3 ${newDir}/tmp22.msh -format msh1 -o ${newDir}/tmp1.msh >> $logFile 2>&1
 
-    echo ""
+    # GetFEMで構造解析
     echo "GetFEM calculating"
-    echo "GetFEM calculating" >> $logFile 2>&1
     python3 calcLinear.py ${newDir}/tmp1.msh ${newDir}/mises.vtk 1>> $logFile 2>/dev/null
     tail -n 10 $logFile 
     echo "Calculation DONE"
 
+    # 結果を表示
     echo "Result : ${newDir}/mises.vtk"
     echo "For example : paraview --data=${newDir}/mises.vtk"
 done
 ```
 
+`autoDetection.sh`
+
+</font>
+</div>
+
+<div class="col" style="width: 40%; float: right;">
+
+<img src="fig/directory.png">
+
+</div>
+</div>
+
 >>>
 
-# 完成！
+<div class="container">
+
+<div class="col" style="width: 40%; float: left;">
+
+<img src="fig/last.png">
+
+</div>
+
+<div class="col" style="width: 40%; float: right;">
+
+<br><br><br><br>
+
+## 完成！
+
+</div>
+</div>
 
 ---
 
-#### 問題点
+<div class="container">
 
-- Windowsのファイル作成をWSLが認識してくれないので自動実行してくれない
-- 別のターミナルでtouchすればそれがトリガーになる
-- メッシュを細かくするとすぐにメモリ不足（VRでも7GBくらいつかっているため）
-- スクリプト作りに苦労しすぎて全然有限要素法の勉強ができていない
+<div class="col" style="width: 50%; float: left;">
 
----
+<font size=5em>
 
 ## まとめ
 
-1. 必要部分と障害物をSTLで作成
+1.  CADで必要部分と障害物を作成
 2.  Oculus MediumでVRモデリング
 3.  Blenderでサーフェスメッシュを作成
 4.  OpenFOAM→meshio→Gmshでボリュームメッシュの作成
 5.  GetFEMで弾性解析
 6.  3-5を自動化
 
----
+### 課題
+
+- Windowsのファイル作成をWSLが認識してくれないので自動実行してくれない（別のターミナルでtouchすればそれがトリガーになる）
+- メッシュを細かくするとすぐにメモリ不足（VRでも7GBくらい使っているため）
+- スクリプト作りに苦労しすぎて全然有限要素法の勉強ができていない
+
+</font>
+
+</div>
+
+<div class="col" style="width: 40%; float: right;">
+
+<font size=4em>
 
 #### 実行環境
-
-<font size=5.5em>
 
 - HMD : Oculus Quest (Oculus Link connected)
   - モデリング : Oculus Medium
@@ -964,4 +979,8 @@ done
       - Gmsh 4.4.1
 
 </font>
+</div>
+</div>
+
+---
   
